@@ -3,6 +3,7 @@ package ru.innim.flutter_login_facebook;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookRequestError;
@@ -49,6 +50,12 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         if (_activity != null) {
+            if (FacebookSdk.getAutoInitEnabled() == false) {
+                Log.i("FaceBook", "FacebookSdk setAutoInitEnabled");
+                FacebookSdk.setAutoInitEnabled(true);
+                FacebookSdk.fullyInitialize();
+            }
+
             switch (call.method) {
                 case _LOGIN_METHOD:
                     final List<String> permissions = call.argument(_PERMISSIONS_ARG);
